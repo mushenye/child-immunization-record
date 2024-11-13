@@ -1,13 +1,13 @@
 # child-immunization-record
-Description
+## Description
 A Django-based application designed to provide child immunization alerts via SMS and email. This app keeps track of children, their immunization schedules, and notifies parents when vaccinations are due.
 
-Features
+## Features
 User registration and authentication
 CRUD operations for children, vaccines, and immunization schedules
 Automated immunization alerts via SMS and email
 API endpoints for managing children, vaccines, and schedules
-Requirements
+## Requirements
 Python 3.8+
 Django 3.x+
 PostgreSQL
