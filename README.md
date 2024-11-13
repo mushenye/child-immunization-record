@@ -35,20 +35,18 @@ Before you begin, ensure you have the following installed:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/your-repo-name.git
-cd your-repo-name
+git clone https://github.com/mushenye/child-immunization-record
+cd child-immunization-record
 2. Set Up a Virtual Environment
 Create and activate a virtual environment:
 
-bash
-Copy code
+# Hto set up virtual enviroment
 python -m venv env
 source env/bin/activate  # For Windows, use `env\Scripts\activate`
 3. Install Dependencies
 Install the dependencies listed in requirements.txt:
 
-bash
-Copy code
+
 pip install -r requirements.txt
 4. Set Up PostgreSQL Database
 Make sure PostgreSQL is installed and running, then create a new database and user with the required privileges.
@@ -56,8 +54,7 @@ Make sure PostgreSQL is installed and running, then create a new database and us
 5. Configure Environment Variables
 Create a .env file in the project root with the following environment variables:
 
-plaintext
-Copy code
+
 SECRET_KEY='your-django-secret-key'
 DB_NAME='your-database-name'
 DB_USER='your-database-username'
@@ -109,26 +106,24 @@ Copy code
 pip install django-crontab
 Add the following to your settings:
 
-python
-Copy code
+###
 INSTALLED_APPS = [
     # other installed apps
     'django_crontab',
 ]
 
+###
 CRONJOBS = [
     ('0 9 * * *', 'api.utils.send_immunization_alerts'),  # Runs every day at 9 AM
 ]
 Add the cron job to the system:
 
-bash
-Copy code
+
 python manage.py crontab add
 Testing
 To run tests for the application:
 
-bash
-Copy code
+##
 python manage.py test
 Contributing
 Fork the repository
@@ -140,7 +135,7 @@ License
 This project is licensed under the Apache License License.
 
 yaml
-Copy code
+
 
 ---
 
