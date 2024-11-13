@@ -177,3 +177,5 @@ CORS_ALLOWED_ORIGINS = [
 
 
 ]
+
+AUTH_USER_MODEL = 'account_manager.User'

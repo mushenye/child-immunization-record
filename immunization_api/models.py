@@ -2,6 +2,8 @@ from django.db import models
 
 from django.db import models
 from django.utils import timezone
+from datetime import date
+from dateutil.relativedelta import relativedelta
 
 class Person(models.Model):
     date_created=models.DateField(auto_now=True)
@@ -19,7 +21,8 @@ class Person(models.Model):
 class Parent(models.Model):
     person=models.ForeignKey(Person, on_delete=models.CASCADE)
     email_address=models.EmailField()
-    parent_phone_number = models.CharField(max_length=15)  # Add this field for the phone number
+    parent_phone_number = models.CharField(max_length=15)  
+    parent_type=models.CharField(choices=[('Father','Father'), ('Mother','Mother')], max_length=50)
 
 
 
@@ -32,6 +35,7 @@ class Child(models.Model):
     person=models.ForeignKey(Person, on_delete=models.CASCADE)
     parent =models.ForeignKey(Parent, on_delete=models.CASCADE, related_name='parent')
     birth_date = models.DateField()
+    birth_weight=models.IntegerField()
     
 
     def __str__(self):
@@ -51,9 +55,13 @@ class ImmunizationSchedule(models.Model):
     child_weight=models.IntegerField()
     child = models.ForeignKey(Child, on_delete=models.CASCADE)
     vaccine = models.ForeignKey(Vaccine, on_delete=models.CASCADE)
-    due_date = models.DateField()
     alert_sent = models.BooleanField(default=False)
 
+    @property
+    def due_date(self):
+        return self.child.birth_date + relativedelta(months=self.vaccine.due_months_after_birth)
+    
+
     def __str__(self):
-        return f"{self.child.name} - {self.vaccine.name}"
+        return f"{self.child.person.fullname} - {self.vaccine.name}"
 
