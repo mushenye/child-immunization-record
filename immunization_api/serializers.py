@@ -11,7 +11,22 @@ class VaccineSerializer(serializers.ModelSerializer):
         model = Vaccine
         fields = '__all__'
 
+
+
 class ImmunizationScheduleSerializer(serializers.ModelSerializer):
+    
+    due_date = serializers.DateField(read_only=True)
+
     class Meta:
         model = ImmunizationSchedule
-        fields = '__all__'
+        fields = [
+            'id',
+            'date_created',
+            'child_weight',
+            'child',
+            'vaccine',
+            'alert_sent',
+            'due_date',
+        ]
+        # Optionally, make some fields read-only if necessary
+        read_only_fields = ['id', 'date_created', 'due_date']

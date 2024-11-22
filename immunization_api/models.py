@@ -1,14 +1,11 @@
 from django.db import models
-
 from django.db import models
-from django.utils import timezone
-from datetime import date
 from dateutil.relativedelta import relativedelta
 
 class Person(models.Model):
-    date_created=models.DateField(auto_now=True)
-    first_name=models.CharField(max_length=50)
-    middle_name=models.CharField(max_length=50)
+    date_created=models.DateField(auto_now_add=True)
+    first_name=models.CharField(max_length=50, blank=True,null=True)
+    middle_name=models.CharField(max_length=50, blank=True,null=True)
     last_name=models.CharField(max_length=50)
 
     @property
@@ -18,11 +15,17 @@ class Person(models.Model):
     def __str__(self):
         return self.fullname
 
-class Parent(models.Model):
+class Caregiver(models.Model):
     person=models.ForeignKey(Person, on_delete=models.CASCADE)
     email_address=models.EmailField()
     parent_phone_number = models.CharField(max_length=15)  
-    parent_type=models.CharField(choices=[('Father','Father'), ('Mother','Mother')], max_length=50)
+    parent=models.CharField(
+        choices=[
+                    ('Father','Father'), 
+                    ('Mother','Mother'),
+                    ('Guardian','Guardian')
+                ], 
+                 max_length=50)
 
 
 
@@ -33,7 +36,7 @@ class Parent(models.Model):
 
 class Child(models.Model):
     person=models.ForeignKey(Person, on_delete=models.CASCADE)
-    parent =models.ForeignKey(Parent, on_delete=models.CASCADE, related_name='parent')
+    parent =models.ForeignKey(Caregiver, on_delete=models.CASCADE)
     birth_date = models.DateField()
     birth_weight=models.IntegerField()
     
@@ -55,7 +58,7 @@ class ImmunizationSchedule(models.Model):
     child_weight=models.IntegerField()
     child = models.ForeignKey(Child, on_delete=models.CASCADE)
     vaccine = models.ForeignKey(Vaccine, on_delete=models.CASCADE)
-    alert_sent = models.BooleanField(default=False)
+    alert_sent = models.BooleanField(default=False, null=True)
 
     @property
     def due_date(self):

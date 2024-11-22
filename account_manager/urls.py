@@ -11,6 +11,8 @@ from rest_framework_simplejwt.views import (
     )
 
 
+
+
 urlpatterns = [
 
     path('register/', Register.as_view(), name='register'),

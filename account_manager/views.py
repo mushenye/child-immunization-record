@@ -6,45 +6,29 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from .serializers import UserSerializer
+from .serializers import MyTokenObtainPairSerializer, UserSerializer
 from rest_framework.request import Request
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-
-class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    @classmethod
-    def get_token(cls, user):
-        token = super().get_token(user)
-
-        # Add custom claims
-        token['email'] = user.email
-        token['username']=user.username
-        # ...
-
-        return token
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
-
 class Register(APIView):
 
-    def post(self, request:Request, *args, **kwargs):
+    def post(self, request: Request, *args, **kwargs):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
-            user=serializer.save()
-            user.set_password(serializer.validated_data['password'])
-            user.save()
+            user = serializer.save()        
 
             refresh = RefreshToken.for_user(user)
         
             response = {
                 'message': 'User created',
-                'data':serializer.data,
+                'data': serializer.data,
                 'refresh': str(refresh),
-                'access': str(refresh.access_token)
+                'access': str(refresh.access_token),
             }
             return Response(data=response, status=status.HTTP_201_CREATED)
 
@@ -75,26 +59,6 @@ class LoginView(APIView):
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-# class LoginView(APIView):
-#     def post(self, request, *args, **kwargs):
-#         username = request.data.get("username")
-#         password = request.data.get("password")
-        
-#         user = authenticate(username=username, password=password)
-        
-#         if user is not None:
-#             # Generate JWT tokens
-#             refresh = RefreshToken.for_user(user)
-            
-#             response = {
-#                 'message': 'Login successful',
-#                 'refresh': str(refresh),
-#                 'access': str(refresh.access_token)
-#             }
-#             return Response(data=response, status=status.HTTP_200_OK)
-        
-#         return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
-
 
 
 class LogoutView(APIView):
@@ -104,7 +68,7 @@ class LogoutView(APIView):
         try:
             refresh_token = request.data.get("refresh")
             token = RefreshToken(refresh_token)
-            token.blacklist()  # Blacklist the token to prevent future use
+            token.blacklist() 
 
             return Response({"message": "Logout successful"}, status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
