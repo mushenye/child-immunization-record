@@ -2,8 +2,13 @@ from django.shortcuts import render
 
 # Create your views here.
 from rest_framework import viewsets
-from .models import Child, Vaccine, ImmunizationSchedule
-from .serializers import ChildSerializer, VaccineSerializer, ImmunizationScheduleSerializer
+from .models import Child, Person, Vaccine, ImmunizationSchedule
+from .serializers import CaregiverSerializer, ChildSerializer, VaccineSerializer, ImmunizationScheduleSerializer
+
+class CaregiverViewset(viewsets.ModelViewSet):
+    queryset=Person.objects.all()
+    serializer_class=CaregiverSerializer
+
 
 class ChildViewSet(viewsets.ModelViewSet):
     queryset = Child.objects.all()

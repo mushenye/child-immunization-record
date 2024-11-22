@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Child, Vaccine, ImmunizationSchedule
+from .models import Caregiver, Child, Person, Vaccine, ImmunizationSchedule
 
 class ChildSerializer(serializers.ModelSerializer):
     class Meta:
@@ -9,6 +9,12 @@ class ChildSerializer(serializers.ModelSerializer):
 class VaccineSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vaccine
+        fields = '__all__'
+
+
+class CaregiverSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Caregiver
         fields = '__all__'
 
 

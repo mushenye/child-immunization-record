@@ -4,6 +4,7 @@ from . import views
 
 router = DefaultRouter()
 router.register(r'children', views.ChildViewSet)
+router.register(r'caregiver', views.CaregiverViewset)
 router.register(r'vaccines', views.VaccineViewSet)
 router.register(r'immunization-schedules', views.ImmunizationScheduleViewSet)
 
