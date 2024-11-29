@@ -1,7 +1,8 @@
 
 
 # Child Immunization Alert System
-
+<img src="Immunization_schedule_720x480.webp">
+ 
 ## Description
 
 This is a Django-based application designed to manage child immunization schedules and provide automatic alerts to parents via SMS and email when a child's immunization is due. The application allows CRUD operations for managing children, vaccines, and immunization schedules, and sends notifications to ensure timely vaccinations.
