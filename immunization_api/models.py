@@ -1,20 +1,54 @@
-from django.db import models
+
 from django.db import models
 from dateutil.relativedelta import relativedelta
+from django.utils.text import slugify
+from django.core.exceptions import ValidationError
+from PIL import Image  
+import uuid  
+
 
 class Person(models.Model):
     date_created = models.DateField(auto_now_add=True)
     first_name = models.CharField(max_length=50, blank=True, null=True)
     middle_name = models.CharField(max_length=50, blank=True, null=True)
     last_name = models.CharField(max_length=50)
+    profile_picture = models.ImageField(upload_to='profiles/', blank=True, null=True)
+    slug = models.SlugField(blank=True, null=True, unique=True)
+
+    def get_slug_string(self):
+        elements = [self.first_name, self.middle_name, self.last_name]
+        filtered_elements = filter(None, elements)
+        return ' '.join(filtered_elements)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base_slug = slugify(self.get_slug_string())
+            self.slug = base_slug
+            while Person.objects.filter(slug=self.slug).exists():
+                self.slug = f'{base_slug}-{uuid.uuid4().hex[:6]}'
+
+        super().save(*args, **kwargs)
+
+        if self.profile_picture:
+            img = Image.open(self.profile_picture.path)
+            if img.height > 300 or img.width > 300:
+                output_size = (300, 300)
+                img.thumbnail(output_size)
+                img.save(self.profile_picture.path)
 
     @property
     def fullname(self):
         name_parts = [self.first_name, self.middle_name, self.last_name]
         return " ".join(filter(None, name_parts))
 
+    def clean(self):
+        super().clean()
+        if not self.last_name.strip():
+            raise ValidationError("Last name cannot be blank or whitespace.")
+
     def __str__(self):
         return self.fullname
+
 
 
 class Caregiver(Person):
@@ -28,6 +62,9 @@ class Caregiver(Person):
         ],
         max_length=50
     )
+    occupation = models.CharField(max_length=100, blank=True, null=True)
+    country = models.CharField(max_length=50, blank=True, null=True)
+
 
     def __str__(self):
         return self.fullname
@@ -36,6 +73,8 @@ class Child(Person):
     parent =models.ForeignKey(Caregiver, on_delete=models.CASCADE)
     birth_date = models.DateField()
     birth_weight=models.IntegerField()
+    gender = models.CharField(max_length=1, choices=[('M', 'Male'), ('F', 'Female'), ('O', 'Other')], blank=True, null=True)
+
     
 
     def __str__(self):
