@@ -38,7 +38,7 @@ class Person(models.Model):
 
     @property
     def fullname(self):
-        name_parts = [self.first_name, self.middle_name, self.last_name]
+        name_parts = [self.first_name.capitalize(), self.middle_name.capitalize(), self.last_name.capitalize()]
         return " ".join(filter(None, name_parts))
 
     def clean(self):
