@@ -11,14 +11,14 @@ def send_immunization_alerts():
     for schedule in schedules:
         child = schedule.child
         vaccine = schedule.vaccine
-        message=f"The vaccine {vaccine.name} is due for {child.name}."
+        message=f"The vaccine {vaccine.name} is due for {child.fullname}."
         # Send an email alert to the parent
 
   
     if child.parent.email_address:
 
         send_mail(
-            subject=f"Immunization Alert for {child.person.fullname}",
+            subject=f"Immunization Alert for {child.fullname}",
             message=message,
             from_email="noreply@immunizationalerts.com",
             recipient_list=[child.parent.email_address],

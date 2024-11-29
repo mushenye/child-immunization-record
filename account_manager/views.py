@@ -9,7 +9,7 @@ from rest_framework import status
 from .serializers import MyTokenObtainPairSerializer, UserSerializer
 from rest_framework.request import Request
 from rest_framework_simplejwt.views import TokenObtainPairView
-
+from rest_framework import mixins, generics
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
@@ -75,5 +75,5 @@ class LogoutView(APIView):
             return Response({"error": "Invalid token or logout failed"}, status=status.HTTP_400_BAD_REQUEST)
         
 
-
+    
 

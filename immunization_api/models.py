@@ -39,7 +39,7 @@ class Child(Person):
     
 
     def __str__(self):
-        return self.fullname()    
+        return self.fullname   
     
 
 class Vaccine(models.Model):

@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'account_manager',
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
+    'hospital',
 ]
 
 SIMPLE_JWT = {
